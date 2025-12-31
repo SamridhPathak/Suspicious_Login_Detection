@@ -1,0 +1,140 @@
+/* RESET */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0f172a;
+  font-family: "Segoe UI", sans-serif;
+  color: #e5e7eb;
+}
+
+/* WRAPPER */
+.wrapper {
+  position: relative;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+.header p {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #94a3b8;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: 420px 420px;
+  gap: 32px;
+}
+
+/* CARD */
+.card {
+  background: #020617;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  min-height: 320px;
+}
+
+/* FORM */
+label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background: #1e293b;
+  color: white;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* RESULT */
+.result {
+  margin-top: 16px;
+  padding-left: 12px;
+  border-left: 4px solid;
+}
+
+.empty {
+  margin-top: 40px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* Risk colors */
+.risk-high {
+  color: #ff4d4f;
+  font-weight: 700;
+}
+
+.risk-medium {
+  color: #fadb14;
+  font-weight: 700;
+}
+
+.risk-low {
+  color: #52c41a;
+  font-weight: 700;
+}
+
+.result.risk-high {
+  border-left-color: #ff4d4f;
+}
+
+.result.risk-medium {
+  border-left-color: #fadb14;
+}
+
+.result.risk-low {
+  border-left-color: #52c41a;
+}
+
+/* Action text */
+.action-text {
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
+@media (max-width: 920px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
