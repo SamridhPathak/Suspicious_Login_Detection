@@ -70,6 +70,14 @@ The objective is to **simulate real-world authentication systems** used by banks
 
 ---
 
+### Security Rules
+
+- Unusual hour + new device + new country → **HIGH risk**
+- More than 5 rapid attempts → **BLOCK**
+- Confidence scores are intentionally **not exposed** to prevent model probing
+
+---
+
 ## 🔄 Project Workflow (Brief)
 
 1. **Dataset Generation**
@@ -101,22 +109,26 @@ The objective is to **simulate real-world authentication systems** used by banks
 ## 📸 Screenshots
 
 ### 🟢 LOW Risk – Normal Login
-![Low Risk](screenshots/01_low_risk_normal_login.png)
+<img width="1905" height="993" alt="01_low_risk_normal_login" src="https://github.com/user-attachments/assets/08f6b63e-7def-4b8d-9391-05bb9af41744" />
 
 ### 🟡 MEDIUM Risk – New Device & Country
-![Medium Risk](screenshots/02_medium_risk_new_device_country.png)
+<img width="1904" height="1000" alt="02_medium_risk_new_device_country" src="https://github.com/user-attachments/assets/bd0bea49-6867-459b-a2fd-f2a0c40ca61d" />
 
 ### 🟡 MEDIUM Risk – Unusual Hour
-![Medium Unusual Hour](screenshots/03_medium_risk_unusual_hour.png)
+<img width="1910" height="992" alt="03_medium_risk_unusual_hour" src="https://github.com/user-attachments/assets/671fe7cf-8cb6-4b76-954a-90b63827a1c0" />
+
 
 ### 🔴 HIGH Risk – Critical Pattern
-![High Risk](screenshots/04_high_risk_critical_pattern.png)
+<img width="1910" height="996" alt="04_high_risk_critical_pattern" src="https://github.com/user-attachments/assets/5d2e9b7d-c798-4263-a288-c99515c6caec" />
+
 
 ### 🚫 BLOCKED – Brute Force Detected
-![Blocked](screenshots/05_blocked_after_multiple_attempts.png)
+<img width="1906" height="991" alt="05_blocked_after_multiple_attempts" src="https://github.com/user-attachments/assets/e85928bc-54bf-43e7-b67a-6606671e4cb2" />
+
 
 ### ⚠️ Input Validation Alert
-![Validation](screenshots/06_input_validation_alert.png)
+<img width="1906" height="1004" alt="06_input_validation_alert" src="https://github.com/user-attachments/assets/2ef605a6-636a-4487-8060-1c54abadb394" />
+
 
 ---
 
