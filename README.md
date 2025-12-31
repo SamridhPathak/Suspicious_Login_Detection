@@ -122,8 +122,8 @@ The objective is to **simulate real-world authentication systems** used by banks
 
 ## 📈 Future Enhancements
 
-1. ## OTP verification workflow
-2. ## User-specific behavioral profiling
-3. ## Admin dashboard for audit logs
-4. ## Cloud deployment (AWS / Azure)
-5. ## JWT-based authentication
+1. OTP verification workflow
+2. User-specific behavioral profiling
+3. Admin dashboard for audit logs
+4. Cloud deployment (AWS / Azure)
+5. JWT-based authentication
