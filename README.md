@@ -70,7 +70,7 @@ The objective is to **simulate real-world authentication systems** used by banks
 
 ---
 
-### Security Rules
+## 🔐 Security Rules
 
 - Unusual hour + new device + new country → **HIGH risk**
 - More than 5 rapid attempts → **BLOCK**
@@ -129,7 +129,6 @@ The objective is to **simulate real-world authentication systems** used by banks
 ### ⚠️ Input Validation Alert
 <img width="1906" height="1004" alt="06_input_validation_alert" src="https://github.com/user-attachments/assets/2ef605a6-636a-4487-8060-1c54abadb394" />
 
-
 ---
 
 ## 📈 Future Enhancements
@@ -139,3 +138,9 @@ The objective is to **simulate real-world authentication systems** used by banks
 3. Admin dashboard for audit logs
 4. Cloud deployment (AWS / Azure)
 5. JWT-based authentication
+
+---
+
+## ⭐ Final Note
+
+This project demonstrates real-world security thinking, combining machine learning, backend engineering, and frontend UX in a practical and scalable way.
