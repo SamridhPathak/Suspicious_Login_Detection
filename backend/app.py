@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from enum import Enum
 from pydantic import BaseModel, Field
 import joblib
@@ -9,6 +9,7 @@ from pathlib import Path
 import redis
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import pandas as pd
 
 # -------------------------
 # Redis Configuration
@@ -46,7 +47,7 @@ def root():
     }
 
 # -------------------------
-# Load ML Model (3-class)
+# Load ML Model
 # -------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "ml" / "suspicious_login_model.pkl"
@@ -94,12 +95,12 @@ class LoginResponse(BaseModel):
     reason: str
 
 # -------------------------
-# Reason Generator (Explanation Only)
+# Reason Generator
 # -------------------------
 def generate_reasons(request: LoginRequest):
     reasons = []
 
-    if request.login_hour < 7 or request.login_hour > 23:
+    if request.login_hour < 7:
         reasons.append("Login at unusual hour")
 
     if request.device == 1:
@@ -114,36 +115,37 @@ def generate_reasons(request: LoginRequest):
 # Prediction Endpoint
 # -------------------------
 @app.post("/predict", response_model=LoginResponse)
-def predict_login(request: LoginRequest):
+def predict_login(request: LoginRequest, http_request: Request):
 
     # -------------------------
-    # 1️⃣ Prepare input
+    # 1️⃣ Prepare input (NO sklearn warning)
     # -------------------------
-    input_data = np.array([[request.login_hour, request.device, request.country]])
+    input_data = pd.DataFrame(
+        [[request.login_hour, request.device, request.country]],
+        columns=["login_hour", "device", "country"]
+    )
 
     # -------------------------
-    # 2️⃣ ML Prediction (3-class)
+    # 2️⃣ ML Prediction
     # -------------------------
-    proba = model.predict_proba(input_data)[0]  # [LOW, MEDIUM, HIGH]
+    proba = model.predict_proba(input_data)[0]
     risk_index = int(np.argmax(proba))
 
     if risk_index == 0:
         risk_level = RiskLevel.LOW
         action = Action.ALLOW
         is_suspicious = False
-
     elif risk_index == 1:
         risk_level = RiskLevel.MEDIUM
         action = Action.REQUIRE_OTP
         is_suspicious = True
-
     else:
         risk_level = RiskLevel.HIGH
         action = Action.REQUIRE_OTP
         is_suspicious = True
 
     # -------------------------
-    # 3️⃣ Critical Security Override
+    # 3️⃣ Rule-based override
     # -------------------------
     if (
         request.login_hour < 7
@@ -155,9 +157,10 @@ def predict_login(request: LoginRequest):
         is_suspicious = True
 
     # -------------------------
-    # 4️⃣ Redis Brute-Force Protection
+    # 4️⃣ Redis Brute-Force Protection (FIXED)
     # -------------------------
-    redis_key = f"login:{request.country}:{request.device}:{request.login_hour // 2}"
+    client_ip = http_request.client.host
+    redis_key = f"login_attempts:{client_ip}"
 
     try:
         attempt_count = redis_client.incr(redis_key)
@@ -177,7 +180,7 @@ def predict_login(request: LoginRequest):
     reasons = generate_reasons(request)
 
     if attempt_count >= MAX_ATTEMPTS_BLOCK:
-        reasons.append("Multiple rapid login attempts detected")
+        reasons.append("Multiple failed login attempts detected")
 
     reason_text = ", ".join(reasons) if reasons else "Login behavior appears normal"
 
@@ -186,11 +189,13 @@ def predict_login(request: LoginRequest):
     # -------------------------
     audit_logger.info({
         "timestamp": datetime.utcnow().isoformat(),
+        "ip": client_ip,
         "login_hour": request.login_hour,
         "country": request.country,
         "device": request.device,
         "risk_level": risk_level.value,
         "action": action.value,
+        "attempts": attempt_count,
         "reason": reason_text
     })
 
